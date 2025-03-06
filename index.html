@@ -17,20 +17,30 @@
             font-family: Arial, sans-serif;
             padding: 20px;
             overflow: hidden; /* Evita scroll */
-            
-            /* Fondo con degradado pixelado */
-            background: linear-gradient(45deg, #8403fc, #00414f);
-            background-size: 200% 200%;
-            animation: moveGradient 10s infinite alternate;
-            
-            /* Filtro pixelado */
-            image-rendering: pixelated;
+
+            /* Fondo con degradado grande */
+            background: linear-gradient(45deg, #8403fc, #00414f, #8403fc);
+            background-size: 400% 400%;
+            animation: moveGradient 12s infinite alternate ease-in-out;
         }
 
-        /* Animación del degradado */
+        /* Animación del gradiente para un movimiento más fluido */
         @keyframes moveGradient {
             0% { background-position: 0% 0%; }
             100% { background-position: 100% 100%; }
+        }
+
+        /* Efecto pixelado extra con un pseudo-elemento */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+            opacity: 0.1; /* Controla la intensidad del efecto pixelado */
+            z-index: -1;
         }
 
         h1, h2, p, audio {
