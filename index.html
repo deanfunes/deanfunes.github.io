@@ -5,18 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>&#590;</title>
     <style>
-        body {
-            background: linear-gradient(to right, #8403fc, #00414f);
-            color: white; /* Hace el texto más legible */
-            text-align: center; /* Centra los elementos */
-            font-family: Arial, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        h1, h2 {
-            margin-top: 20px;
+
+        body {
+            color: black; /* Letras en negro */
+            text-align: left; /* Texto alineado a la izquierda */
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Evita scroll */
+            padding: 20px;
+        }
+
+        #pixelCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Mantiene el fondo detrás del contenido */
+        }
+
+        h1, h2, p, audio {
+            position: relative;
+            z-index: 1; /* Asegura que el texto esté sobre el fondo */
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
+    <canvas id="pixelCanvas"></canvas>
+
     <h1>Dean Funes</h1>
     <p>...estamos trabajando para usted</p>
     
@@ -25,5 +46,55 @@
         <source src="cancion.ogg" type="audio/mpeg">
         Tu navegador no soporta el audio HTML5.
     </audio>
+
+    <script>
+        const canvas = document.getElementById("pixelCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let pixels = [];
+        const pixelSize = 10;
+        const numPixelsX = Math.floor(canvas.width / pixelSize);
+        const numPixelsY = Math.floor(canvas.height / pixelSize);
+
+        function createPixels() {
+            pixels = [];
+            for (let y = 0; y < numPixelsY; y++) {
+                for (let x = 0; x < numPixelsX; x++) {
+                    pixels.push({
+                        x: x * pixelSize,
+                        y: y * pixelSize,
+                        color: Math.random() > 0.5 ? "#8403fc" : "#00414f",
+                        speed: Math.random() * 2 + 0.5
+                    });
+                }
+            }
+        }
+
+        function animatePixels() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pixels.forEach(pixel => {
+                ctx.fillStyle = pixel.color;
+                ctx.fillRect(pixel.x, pixel.y, pixelSize, pixelSize);
+                pixel.y += pixel.speed;
+
+                if (pixel.y > canvas.height) {
+                    pixel.y = 0;
+                }
+            });
+            requestAnimationFrame(animatePixels);
+        }
+
+        createPixels();
+        animatePixels();
+
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            createPixels();
+        });
+    </script>
 </body>
 </html>
