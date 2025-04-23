@@ -61,30 +61,12 @@
     
     <img src="Logo glitch.gif" alt="Descripción de la imagen" class="imagen">
     
-  <h2>demos ƒ</h2>
-
-<audio controls>
-    <source src="demofunes.ogg" type="audio/ogg">
-    Tu navegador no soporta el audio HTML5.
-</audio>
+  <h2>demo ƒ</h2>
 
 <audio controls>
     <source src="Escuchar.ogg" type="audio/ogg">
     Tu navegador no soporta el audio HTML5.
 </audio>
-<script>
-    // Obtener todos los elementos <audio>
-    const audios = document.querySelectorAll("audio");
 
-    audios.forEach(audio => {
-        audio.addEventListener("play", () => {
-            audios.forEach(otherAudio => {
-                if (otherAudio !== audio) {
-                    otherAudio.pause();
-                }
-            });
-        });
-    });
-</script>
 </body>
 </html>
