@@ -62,22 +62,20 @@
     }
 
     .ascii-container {
-      margin-top: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+  margin-top: 20px;
+}
 
-    .ascii-art {
-      white-space: pre;
-      font-size: 10px;
-      line-height: 1.1;
-      overflow-x: auto;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 10px;
-      margin-bottom: 20px;
-      border-left: 2px solid #444;
-    }
+.ascii-art {
+  white-space: pre;             /* Respeta los espacios tal como están */
+  font-family: monospace;       /* Asegura alineación de caracteres */
+  font-size: 10px;
+  line-height: 1.1;
+  overflow-x: auto;             /* Si se pasa de ancho, permite scroll */
+  margin-bottom: 20px;
+  background: none;
+  border: none;
+  padding: 0;
+}
 
     @media screen and (max-width: 768px) {
       .ascii-art {
