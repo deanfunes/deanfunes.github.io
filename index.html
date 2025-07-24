@@ -66,7 +66,7 @@
 </head>
 <body>
  
-  <p class="glitch-line" data-text="...somos dean ƒunes y hacemos música"></p>
+  <p class="glitch-line" data-text="somos dean ƒunes y hacemos música"></p>
 
   <img src="Logo glitch.gif" alt="Logo" class="imagen" />
 
@@ -137,7 +137,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".glitch-line").forEach(el => {
         const text = el.getAttribute("data-text") || "";
-        fullCharsetDecodeWithMovingSides(el, text, 9000, 90, 5);
+        fullCharsetDecodeWithMovingSides(el, text, 9000, 90, 4);
       });
     });
   </script>
