@@ -54,25 +54,92 @@
       display: block;
       margin: 10px 0;
     }
+
+    .glitch-line {
+      font-family: monospace;
+      color: #ffffff;
+      font-size: 2.5em;
+      white-space: pre;
+      letter-spacing: 1.5px;
+    }
   </style>
 </head>
 <body>
-  <h1>d&fnof;</h1>
-  <p>...somos dean funes y hacemos música</p>
+ 
+  <p class="glitch-line" data-text="...somos dean ƒunes y hacemos música"></p>
 
-  <img src="Logo glitch.gif" alt="Logo de la banda" class="imagen" />
+  <img src="Logo glitch.gif" alt="Logo" class="imagen" />
 
-  <h2>demo ƒ</h2>
+  <h2 class="glitch-line" data-text="demo ƒ"></h2>
 
   <audio controls>
     <source src="satiro con tek.ogg" type="audio/ogg" />
     Tu navegador no soporta el audio HTML5.
   </audio>
 
-  <!-- Imágenes en lugar de ASCII -->
   <img src="ilustracion1.png" alt="Ilustración 1" class="imagen" />
   <img src="ilustracion2.png" alt="Ilustración 2" class="imagen" />
-  <img src="ilustracion3.png" alt="Ilustración 2" class="imagen" />
-  <img src="ilustracion4.png" alt="Ilustración 2" class="imagen" />
+  <img src="ilustracion3.png" alt="Ilustración 3" class="imagen" />
+  <img src="ilustracion4.png" alt="Ilustración 4" class="imagen" />
+
+  <script>
+    function fullCharsetDecodeWithMovingSides(element, finalText, duration = 3000, stepTime = 50, sideChars = 3) {
+      const charset = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:',.<>/?~\`¿¡°¬∞÷≈≠¢€£¥•¶§`;
+      const length = finalText.length;
+      const revealed = Array(length).fill(false);
+      const startTime = Date.now();
+
+      const interval = setInterval(() => {
+        const now = Date.now();
+        const elapsed = now - startTime;
+
+        let displayText = "";
+
+        for (let i = 0; i < length; i++) {
+          if (!revealed[i] && Math.random() < 0.08) {
+            revealed[i] = true;
+          }
+
+          const char = revealed[i] ? finalText[i] : charset[Math.floor(Math.random() * charset.length)];
+          displayText += char;
+        }
+
+        const prefix = Array(sideChars)
+          .fill(0)
+          .map(() => charset[Math.floor(Math.random() * charset.length)])
+          .join("");
+        const suffix = Array(sideChars)
+          .fill(0)
+          .map(() => charset[Math.floor(Math.random() * charset.length)])
+          .join("");
+
+        element.textContent = `${prefix} ${displayText} ${suffix}`;
+
+        if (revealed.every(Boolean) && elapsed >= duration) {
+          clearInterval(interval);
+
+          setInterval(() => {
+            const dynamicPrefix = Array(sideChars)
+              .fill(0)
+              .map(() => charset[Math.floor(Math.random() * charset.length)])
+              .join("");
+            const dynamicSuffix = Array(sideChars)
+              .fill(0)
+              .map(() => charset[Math.floor(Math.random() * charset.length)])
+              .join("");
+
+            element.textContent = `${dynamicPrefix} ${finalText} ${dynamicSuffix}`;
+          }, stepTime);
+        }
+      }, stepTime);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".glitch-line").forEach(el => {
+        const text = el.getAttribute("data-text") || "";
+        fullCharsetDecodeWithMovingSides(el, text, 3000, 60, 8);
+      });
+    });
+  </script>
 </body>
 </html>
