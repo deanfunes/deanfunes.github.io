@@ -26,10 +26,8 @@
     body::before {
       content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noise)"/></svg>');
       opacity: 0.1;
       z-index: -1;
@@ -92,7 +90,7 @@
       width: 100%;
     }
 
-    /* Popup viewer */
+    /* Viewer */
     .viewer {
       position: fixed;
       top: 0; left: 0;
@@ -103,65 +101,61 @@
       align-items: center;
       justify-content: center;
       z-index: 999;
-      flex-direction: column;
-    }
-
-    .viewer pre {
-      color: #A020F0;
-      font-family: monospace;
-      font-size: 1.5em;
-      white-space: pre-wrap;
-      text-align: center;
-      max-width: 90vw;
-      max-height: 90vh;
-      overflow: auto;
     }
 
     .viewer img {
       max-width: 90vw;
       max-height: 90vh;
-      display: none;
+    }
+
+    .mensaje {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px 20px;
+      font-family: monospace;
+      font-size: 1.2em;
+      border-radius: 5px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     @media (max-width: 768px) {
       .header-container {
         flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
         flex-wrap: wrap;
       }
 
       .glitch-line {
-        font-size: 1.2em;
+        font-size: 1.5em;
       }
 
       .grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 4px;
-      }
-
-      .grid .cell {
-        border: none;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 4px;
+        margin: 0;
       }
 
       .grid .cell {
         border: none;
       }
 
-      .glitch-line {
-        font-size: 0.8em;
+      .header-container img {
+        width: 100%;
+        margin: 0;
       }
 
-      .header-container {
-        flex-direction: column;
-        align-items: flex-start;
+      .grid .cell img {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        padding: 0;
       }
     }
   </style>
@@ -193,9 +187,10 @@
   </div>
 
   <div id="viewer" class="viewer" style="display: none;">
-    <pre id="viewer-glitch">█████████████</pre>
     <img id="viewer-img" src="" alt="Preview" />
   </div>
+
+  <div id="mensaje" class="mensaje"></div>
 
   <script>
     function fullCharsetDecodeWithMovingSides(element, finalText, duration = 3000, stepTime = 50, sideChars = 3) {
@@ -243,37 +238,34 @@
 
       const viewer = document.getElementById("viewer");
       const viewerImg = document.getElementById("viewer-img");
-      const viewerGlitch = document.getElementById("viewer-glitch");
+      const mensaje = document.getElementById("mensaje");
+
+      const mensajes = [
+        "me recuerda a algo que nunca pasó. entre lo lógico y lo práctico",
+        "deanƒunes hace música",
+        "la costra de la herida es dulce",
+        "se derrite el hielo en tu alfombra",
+        "llovió bastante en el hotel",
+        "me equivoqué, hay algo que no puedo ver, me persigue",
+        "se está hundiendo el puñal mas cerca. pero no podrá cortar la trenza",
+      ];
 
       document.querySelectorAll(".grid .cell img").forEach(img => {
         img.addEventListener("click", () => {
-          viewer.style.display = "flex";
-          viewerImg.style.display = "none";
-          viewerImg.src = img.src;
+          const random = mensajes[Math.floor(Math.random() * mensajes.length)];
+          mensaje.textContent = random;
+          mensaje.style.opacity = 1;
 
-          // glitch effect placeholder
-          let glitchText = "█████████████████████████████████████████████████████";
-          let steps = 0;
-          const interval = setInterval(() => {
-            steps++;
-            let scrambled = "";
-            for (let i = 0; i < glitchText.length; i++) {
-              scrambled += Math.random() > 0.1 ? glitchText[Math.floor(Math.random() * glitchText.length)] : "█";
-            }
-            viewerGlitch.textContent = scrambled;
-
-            if (steps > 10) {
-              clearInterval(interval);
-              viewerGlitch.style.display = "none";
-              viewerImg.style.display = "block";
-            }
-          }, 80);
+          setTimeout(() => {
+            mensaje.style.opacity = 0;
+            viewerImg.src = img.src;
+            viewer.style.display = "flex";
+          }, 2000);
         });
       });
 
       viewer.addEventListener("click", () => {
         viewer.style.display = "none";
-        viewerGlitch.style.display = "block";
       });
 
       document.addEventListener("keydown", (e) => {
