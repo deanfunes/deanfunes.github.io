@@ -96,30 +96,17 @@
       display: block;
     }
 
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+@media (max-width: 768px) {
+  .glitch-line {
+    font-size: 1.8em;
+  }
+}
 
-      .glitch-line {
-        font-size: 3em;
-      }
-
-      .header-container {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .grid {
-        grid-template-columns: repeat(1, 1fr);
-      }
-
-      .glitch-line {
-        font-size: 2.5em;
-      }
-    }
+@media (max-width: 480px) {
+  .glitch-line {
+    font-size: 1.3em;
+  }
+}
   </style>
 </head>
 <body>
