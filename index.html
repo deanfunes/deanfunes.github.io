@@ -19,10 +19,8 @@
     body {
       background: black;
       color: white;
-      text-align: left;
       font-family: monospace, Courier, sans-serif;
       padding: 20px;
-      overflow-y: auto;
     }
 
     body::before {
@@ -44,34 +42,27 @@
       100% { transform: translateX(-1px); }
     }
 
-    h1, h2, p, audio {
-      margin-bottom: 10px;
-    }
-
     .glitch-line {
       font-family: monospace, Courier, sans-serif;
       color: #ffffff;
-      font-size: 1.5em; /* Aumentado x5 */
+      font-size: 4em;
       white-space: pre;
       letter-spacing: 1.2px;
     }
 
-    /* Contenedor texto + gif */
     .header-container {
       display: flex;
       align-items: center;
       gap: 20px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
+      flex-wrap: nowrap;
     }
 
     .header-container img {
-      max-width: 166px; /* 1/3 del tamaño anterior */
+      width: 160px;
       height: auto;
       flex-shrink: 0;
     }
 
-    /* Cuadrícula de imágenes 3x3 */
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -87,34 +78,99 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
     }
 
     .grid .cell img {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* ahora ajusta al cuadrado, sin recortar */
-      display: block;
+      object-fit: contain;
     }
 
-@media (max-width: 768px) {
-  .glitch-line {
-    font-size: 1.8em;
-  }
-}
+    audio {
+      margin-top: 20px;
+      width: 100%;
+    }
 
-@media (max-width: 480px) {
-  .glitch-line {
-    font-size: 1.3em;
-  }
-}
+    /* Popup viewer */
+    .viewer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      flex-direction: column;
+    }
+
+    .viewer pre {
+      color: #A020F0;
+      font-family: monospace;
+      font-size: 1.5em;
+      white-space: pre-wrap;
+      text-align: center;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow: auto;
+    }
+
+    .viewer img {
+      max-width: 90vw;
+      max-height: 90vh;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .glitch-line {
+        font-size: 1.2em;
+      }
+
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+
+      .grid .cell {
+        border: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+      }
+
+      .grid .cell {
+        border: none;
+      }
+
+      .glitch-line {
+        font-size: 0.8em;
+      }
+
+      .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Texto + GIF -->
   <div class="header-container">
     <img src="Logo glitch.gif" alt="Logo" />
-    <p class="glitch-line" data-text="deanƒunes hace música"></p>
+    <p class="glitch-line" data-text="somos deanƒunes y hacemos música"></p>
   </div>
 
   <h2 class="glitch-line" data-text="demo ƒ"></h2>
@@ -124,17 +180,21 @@
     Tu navegador no soporta el audio HTML5.
   </audio>
 
-  <!-- Cuadrícula de imágenes 3x3 -->
   <div class="grid">
     <div class="cell"><img src="ilustracion1.png" alt="Ilustración 1" /></div>
     <div class="cell"><img src="ilustracion2.png" alt="Ilustración 2" /></div>
     <div class="cell"><img src="ilustracion3.png" alt="Ilustración 3" /></div>
     <div class="cell"><img src="ilustracion4.png" alt="Ilustración 4" /></div>
-    <div class="cell"><!-- vacío --></div>
-    <div class="cell"><!-- vacío --></div>
-    <div class="cell"><!-- vacío --></div>
-    <div class="cell"><!-- vacío --></div>
-    <div class="cell"><!-- vacío --></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+  </div>
+
+  <div id="viewer" class="viewer" style="display: none;">
+    <pre id="viewer-glitch">█████████████</pre>
+    <img id="viewer-img" src="" alt="Preview" />
   </div>
 
   <script>
@@ -159,30 +219,16 @@
           displayText += char;
         }
 
-        const prefix = Array(sideChars)
-          .fill(0)
-          .map(() => charset[Math.floor(Math.random() * charset.length)])
-          .join("");
-        const suffix = Array(sideChars)
-          .fill(0)
-          .map(() => charset[Math.floor(Math.random() * charset.length)])
-          .join("");
+        const prefix = Array(sideChars).fill(0).map(() => charset[Math.floor(Math.random() * charset.length)]).join("");
+        const suffix = Array(sideChars).fill(0).map(() => charset[Math.floor(Math.random() * charset.length)]).join("");
 
         element.textContent = `${prefix} ${displayText} ${suffix}`;
 
         if (revealed.every(Boolean) && elapsed >= duration) {
           clearInterval(interval);
-
           setInterval(() => {
-            const dynamicPrefix = Array(sideChars)
-              .fill(0)
-              .map(() => charset[Math.floor(Math.random() * charset.length)])
-              .join("");
-            const dynamicSuffix = Array(sideChars)
-              .fill(0)
-              .map(() => charset[Math.floor(Math.random() * charset.length)])
-              .join("");
-
+            const dynamicPrefix = Array(sideChars).fill(0).map(() => charset[Math.floor(Math.random() * charset.length)]).join("");
+            const dynamicSuffix = Array(sideChars).fill(0).map(() => charset[Math.floor(Math.random() * charset.length)]).join("");
             element.textContent = `${dynamicPrefix} ${finalText} ${dynamicSuffix}`;
           }, stepTime);
         }
@@ -193,6 +239,45 @@
       document.querySelectorAll(".glitch-line").forEach(el => {
         const text = el.getAttribute("data-text") || "";
         fullCharsetDecodeWithMovingSides(el, text, 6000, 80, 4);
+      });
+
+      const viewer = document.getElementById("viewer");
+      const viewerImg = document.getElementById("viewer-img");
+      const viewerGlitch = document.getElementById("viewer-glitch");
+
+      document.querySelectorAll(".grid .cell img").forEach(img => {
+        img.addEventListener("click", () => {
+          viewer.style.display = "flex";
+          viewerImg.style.display = "none";
+          viewerImg.src = img.src;
+
+          // glitch effect placeholder
+          let glitchText = "█████████████████████████████████████████████████████";
+          let steps = 0;
+          const interval = setInterval(() => {
+            steps++;
+            let scrambled = "";
+            for (let i = 0; i < glitchText.length; i++) {
+              scrambled += Math.random() > 0.1 ? glitchText[Math.floor(Math.random() * glitchText.length)] : "█";
+            }
+            viewerGlitch.textContent = scrambled;
+
+            if (steps > 10) {
+              clearInterval(interval);
+              viewerGlitch.style.display = "none";
+              viewerImg.style.display = "block";
+            }
+          }, 80);
+        });
+      });
+
+      viewer.addEventListener("click", () => {
+        viewer.style.display = "none";
+        viewerGlitch.style.display = "block";
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") viewer.style.display = "none";
       });
     });
   </script>
