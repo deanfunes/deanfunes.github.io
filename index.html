@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -43,7 +43,7 @@
     .glitch-line {
       font-family: monospace, Courier, sans-serif;
       color: #ffffff;
-      font-size: 4em;
+      font-size: clamp(1.5em, 6vw, 4em);
       white-space: pre;
       letter-spacing: 1.2px;
     }
@@ -90,7 +90,6 @@
       width: 100%;
     }
 
-    /* Viewer */
     .viewer {
       position: fixed;
       top: 0; left: 0;
@@ -110,28 +109,27 @@
 
     .mensaje {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.8);
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
       color: white;
-      padding: 10px 20px;
       font-family: monospace;
-      font-size: 1.2em;
-      border-radius: 5px;
+      font-size: 1.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       z-index: 1000;
       opacity: 0;
       transition: opacity 0.3s ease;
+      pointer-events: none;
     }
 
     @media (max-width: 768px) {
       .header-container {
         flex-direction: row;
         flex-wrap: wrap;
-      }
-
-      .glitch-line {
-        font-size: 1.5em;
       }
 
       .grid {
@@ -161,7 +159,6 @@
   </style>
 </head>
 <body>
-
   <div class="header-container">
     <img src="Logo glitch.gif" alt="Logo" />
     <p class="glitch-line" data-text="somos deanƒunes y hacemos música"></p>
@@ -247,7 +244,7 @@
         "se derrite el hielo en tu alfombra",
         "llovió bastante en el hotel",
         "me equivoqué, hay algo que no puedo ver, me persigue",
-        "se está hundiendo el puñal mas cerca. pero no podrá cortar la trenza",
+        "se está hundiendo el puñal mas cerca. pero no podrá cortar la trenza",
       ];
 
       document.querySelectorAll(".grid .cell img").forEach(img => {
@@ -260,7 +257,7 @@
             mensaje.style.opacity = 0;
             viewerImg.src = img.src;
             viewer.style.display = "flex";
-          }, 2000);
+          }, 3000);
         });
       });
 
