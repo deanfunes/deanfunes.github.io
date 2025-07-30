@@ -251,13 +251,53 @@
         "se está hundiendo el puñal mas cerca. pero no podrá cortar la trenza",3
       ];
 
-      function mostrarMensajeConAnimacion(texto) {
-        fullCharsetDecodeWithMovingSides(mensaje, texto, 500, 30, 0);
-        mensaje.style.opacity = 1;
-        setTimeout(() => {
-          mensaje.style.opacity = 0;
-        }, 3000);
+      let mensajeInterval; // para cancelar el anterior
+
+function mostrarMensajeConAnimacion(texto) {
+  if (mensajeInterval) clearInterval(mensajeInterval); // cancelar anterior
+
+  const charset = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:',.<>/?~\`¿¡°¬∞÷≈≠¢€£¥•¶§`;
+  const finalText = texto;
+  const length = finalText.length;
+  const revealed = Array(length).fill(false);
+  const startTime = Date.now();
+  const duration = 3000;
+  const stepTime = 30;
+  const sideChars = 0;
+
+  mensaje.style.opacity = 1;
+  mensaje.style.pointerEvents = "none";
+
+  mensajeInterval = setInterval(() => {
+    const now = Date.now();
+    const elapsed = now - startTime;
+
+    let displayText = "";
+
+    for (let i = 0; i < length; i++) {
+      if (!revealed[i] && Math.random() < 0.08) {
+        revealed[i] = true;
       }
+
+      const char = revealed[i]
+        ? finalText[i]
+        : charset[Math.floor(Math.random() * charset.length)];
+      displayText += char;
+    }
+
+    mensaje.textContent = `${displayText}`;
+
+    if (revealed.every(Boolean) && elapsed >= duration) {
+      clearInterval(mensajeInterval);
+      mensajeInterval = null;
+
+      setTimeout(() => {
+        mensaje.style.opacity = 0;
+        mensaje.textContent = "";
+      }, 500);
+    }
+  }, stepTime);
+}
 
       document.querySelectorAll(".grid .cell img").forEach(img => {
         img.addEventListener("click", () => {
