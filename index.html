@@ -194,7 +194,7 @@
   <div id="mensaje" class="mensaje"></div>
 
   <script>
-    function fullCharsetDecodeWithMovingSides(element, finalText, duration = 3000, stepTime = 50, sideChars = 3) {
+    function fullCharsetDecodeWithMovingSides(element, finalText, duration = 3000, stepTime = 50, sideChars = 6) {
       const charset = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:',.<>/?~\`¿¡°¬∞÷≈≠¢€£¥•¶§`;
       const length = finalText.length;
       const revealed = Array(length).fill(false);
@@ -234,7 +234,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".glitch-line").forEach(el => {
         const text = el.getAttribute("data-text") || "";
-        fullCharsetDecodeWithMovingSides(el, text, 6000, 80, 4);
+        fullCharsetDecodeWithMovingSides(el, text, 6000, 80, 6);
       });
 
       const viewer = document.getElementById("viewer");
@@ -263,7 +263,7 @@ function mostrarMensajeConAnimacion(texto) {
   const startTime = Date.now();
   const duration = 3000;
   const stepTime = 30;
-  const sideChars = 0;
+  const sideChars = 6;
 
   mensaje.style.opacity = 1;
   mensaje.style.pointerEvents = "none";
@@ -285,7 +285,9 @@ function mostrarMensajeConAnimacion(texto) {
       displayText += char;
     }
 
-    mensaje.textContent = `${displayText}`;
+   const prefix = Array(sideChars).fill(0).map(() => charset[Math.floor(Math.random() * charset.length)]).join("");
+const suffix = Array(sideChars).fill(0).map(() => charset[Math.floor(Math.random() * charset.length)]).join("");
+mensaje.textContent = `${prefix} ${displayText} ${suffix}`;
 
     if (revealed.every(Boolean) && elapsed >= duration) {
       clearInterval(mensajeInterval);
