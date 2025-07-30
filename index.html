@@ -116,13 +116,13 @@
       background: black;
       color: white;
       font-family: monospace;
-      font-size: 1.5em;
+      font-size: 1.0em;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.5s ease;
       pointer-events: none;
     }
 
@@ -194,7 +194,7 @@
   <div id="mensaje" class="mensaje"></div>
 
   <script>
-    function fullCharsetDecodeWithMovingSides(element, finalText, duration = 3000, stepTime = 50, sideChars = 6) {
+    function fullCharsetDecodeWithMovingSides(element, finalText, duration = 3000, stepTime = 50, sideChars = 4) {
       const charset = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:',.<>/?~\`¿¡°¬∞÷≈≠¢€£¥•¶§`;
       const length = finalText.length;
       const revealed = Array(length).fill(false);
@@ -234,7 +234,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".glitch-line").forEach(el => {
         const text = el.getAttribute("data-text") || "";
-        fullCharsetDecodeWithMovingSides(el, text, 6000, 80, 6);
+        fullCharsetDecodeWithMovingSides(el, text, 6000, 80, 1);
       });
 
       const viewer = document.getElementById("viewer");
