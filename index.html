@@ -43,7 +43,7 @@
     .glitch-line {
       font-family: monospace, Courier, sans-serif;
       color: #ffffff;
-      font-size: clamp(1em, 4vw, 2em);
+      font-size: clamp(1.5em, 3vw, 2em);
       white-space: pre;
       letter-spacing: 1.2px;
     }
@@ -155,6 +155,10 @@
       body {
         padding: 0;
       }
+
+      .glitch-line {
+        font-size: clamp(1em, 3vw, 1.5em);
+      }
     }
   </style>
 </head>
@@ -241,23 +245,29 @@
         "me recuerda a algo que nunca pasó. entre lo lógico y lo práctico",
         "deanƒunes hace música",
         "la costra de la herida es dulce",
-        "se derrite el hielo en tu alfombra",
+        "se derrite el hielo en la alfombra",
         "llovió bastante en el hotel",
         "me equivoqué, hay algo que no puedo ver, me persigue",
-        "se está hundiendo el puñal mas cerca. pero no podrá cortar la trenza",
+        "se está hundiendo el puñal mas cerca. pero no podrá cortar la trenza",3
       ];
+
+      function mostrarMensajeConAnimacion(texto) {
+        fullCharsetDecodeWithMovingSides(mensaje, texto, 500, 30, 0);
+        mensaje.style.opacity = 1;
+        setTimeout(() => {
+          mensaje.style.opacity = 0;
+        }, 3000);
+      }
 
       document.querySelectorAll(".grid .cell img").forEach(img => {
         img.addEventListener("click", () => {
           const random = mensajes[Math.floor(Math.random() * mensajes.length)];
-          mensaje.textContent = random;
-          mensaje.style.opacity = 1;
+          mostrarMensajeConAnimacion(random);
 
           setTimeout(() => {
-            mensaje.style.opacity = 0;
             viewerImg.src = img.src;
             viewer.style.display = "flex";
-          }, 2500);
+          }, 3000);
         });
       });
 
